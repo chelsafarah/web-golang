@@ -1,0 +1,33 @@
+{{define "index"}}
+<!DOCTYPE html>
+<html>
+  <head>
+    {{template "head"}}
+  </head>
+  <body>
+    <h1>Created Task</h1>
+    <a class="btn btn-primary" href="/form">Create Task</a>
+    <table class="table table-striped table-bordered">
+      <thead class="table-dark">
+        <tr>
+          <th>Task</th>
+          <th>Assignee</th>
+          <th>Deadline</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{range .list}}
+        <tr>
+          <td>{{.Task}}</td>
+          <td>{{.Assignee}}</td>
+          <td>{{.Deadline}}</td>
+          <td>############</td>
+        </tr>
+        {{end}}
+      </tbody>
+    </table>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+  </body>
+</html>
+{{end}}
