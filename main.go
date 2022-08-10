@@ -85,9 +85,9 @@ func remove(id string) {
 		log.Fatal(err.Error())
 	}
 	fmt.Println(id)
-	var selector = primitive.ObjectID{"id": id}
+	var selector = bson.M{"id": id}
 	fmt.Println(selector)
-	_, err = db.Collection("tasks").DeleteOne(ctx,selector)
+	_, err = db.Collection("tasks").DeleteOne(ctx, selector)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
