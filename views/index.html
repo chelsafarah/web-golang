@@ -13,7 +13,7 @@
           <th>Task</th>
           <th>Assignee</th>
           <th>Deadline</th>
-          <th>Status</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody>
@@ -22,7 +22,15 @@
           <td>{{.Task}}</td>
           <td>{{.Assignee}}</td>
           <td>{{.Deadline}}</td>
-          <td>############</td>
+          <td>
+            {{if .IsDone}}
+            <a class="btn btn-success">Done</a>
+            {{else}}
+            <a class="btn btn-info">Mark as Done</a>
+            {{end}}
+            <a class="btn btn-warning">Edit</a>
+            <a class="btn btn-danger" href="/delete?id={{.ID}}">Delete</a>
+          </td>
         </tr>
         {{end}}
       </tbody>

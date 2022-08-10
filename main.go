@@ -23,6 +23,7 @@ type the_task struct {
 	Task  string `bson:"task"`
 	Assignee string    `bson:"assignee"`
 	Deadline string `bson:"deadline"`
+	IsDone bool `bson:"isdone"` 
 }
 
 func connect() (*mongo.Database, error) {
@@ -45,7 +46,7 @@ func insert(task string, assignee string, deadline string ) {
 		log.Fatal(err.Error())
 	}
 
-	_, err = db.Collection("tasks").InsertOne(ctx, the_task{primitive.NewObjectID(),task, assignee, deadline})
+	_, err = db.Collection("tasks").InsertOne(ctx, the_task{primitive.NewObjectID(),task, assignee, deadline,false})
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -76,6 +77,22 @@ func find() []the_task{
 		result = append(result, row)
 	}
 	return result
+}
+
+func remove(id string) {
+	db, err := connect()
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+	fmt.Println(id)
+	var selector = primitive.ObjectID{"id": id}
+	fmt.Println(selector)
+	_, err = db.Collection("tasks").DeleteOne(ctx,selector)
+	if err != nil {
+		log.Fatal(err.Error())
+	}
+
+	fmt.Println("Remove success!")
 }
 
 func main() {
@@ -113,7 +130,7 @@ func main() {
 
 	http.HandleFunc("/form", routeIndexGet)
 	http.HandleFunc("/result", submit)
-
+	http.HandleFunc("/delete", routeDelete)
 	
 
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("assets"))))
@@ -181,4 +198,10 @@ func submit(w http.ResponseWriter, r *http.Request) {
 	}
 
 	http.Error(w, "", http.StatusBadRequest)
+}
+
+func routeDelete(w http.ResponseWriter, r *http.Request){
+	id := r.URL.Query().Get("id")
+	remove(id)
+	http.Redirect(w, r, "/", http.StatusFound)
 }
